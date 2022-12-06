@@ -8,11 +8,11 @@ CAMERA_ID = 2
 FACE_DETECTION_FREQUENCY = 1
 FACE_DETECTOR = "CV"
 
-USE_CAM 		= 	True
+USE_CAM 		= 	False
 SAVE_FRAMES 	= 	True
 SAVE_FACES 		= 	True
 FACE_ALIGN		= 	True
-
+FACE_PREPROCESS = 	True
 
 def getCameraCapture(camera_id=0):
 	cap = cv2.VideoCapture(camera_id)
@@ -55,6 +55,8 @@ if __name__ == "__main__":
 			# Detecting Faces
 			if count % FACE_DETECTION_FREQUENCY == 0:
 				face, face_img = facedetect.detectFace(frame=frame, face_detector=FACE_DETECTOR, aligned=FACE_ALIGN)
+				if FACE_PREPROCESS:
+					face_img = preprocessing.preprocess(image=face_img, grayscale=True, normalise=True, equalise=True)
 				if face is not None:
 					if SAVE_FACES:
 						if FACE_ALIGN:
@@ -63,7 +65,7 @@ if __name__ == "__main__":
 							cv2.imwrite('Images/Faces/Face_' + str(count) + '.jpg', face_img)
 					cv2.rectangle(frame, (face[0], face[1]), (face[2], face[3]), (0, 255, 0), 5)
 
-			cv2.imshow('frame', frame)
+			cv2.imshow('frame', face_img)
 			if cv2.waitKey(1) == ord('q'):
 				break
 
@@ -75,18 +77,21 @@ if __name__ == "__main__":
 		for frame_path in orderDataFolder(frames_path):
 			count += 1
 			frame = cv2.imread(frames_path + frame_path)
-			face, face_img = facedetect.detectFace(frame=frame, face_detector=FACE_DETECTOR, aligned=FACE_ALIGN)
-			if face_img is None:
-				face_img_preprocessed = None
+			face, face_img_unprocessed = facedetect.detectFace(frame=frame, face_detector=FACE_DETECTOR, aligned=FACE_ALIGN)
+			if face_img_unprocessed is None:
 				continue
 			else:
+				if FACE_PREPROCESS:
+					face_img = preprocessing.preprocess(image=face_img_unprocessed, grayscale=True, normalise=True, equalise=True)
+				else:
+					face_img = face_img_unprocessed
 				if SAVE_FACES:
 					if FACE_ALIGN:
 						cv2.imwrite('Images/Faces_Aligned/Face_' + str(count) + '.jpg', face_img)
 					else:
 						cv2.imwrite('Images/Faces/Face_' + str(count) + '.jpg', face_img)
-				cv2.rectangle(frame, (face[0], face[1]), (face[2], face[3]), (0, 255, 0), 5)
-				cv2.imshow('frame', frame)
+				# cv2.rectangle(frame, (face[0], face[1]), (face[2], face[3]), (0, 255, 0), 5)
+				cv2.imshow('frame', face_img)
 				if cv2.waitKey(1) == ord('q'):
 					break
 

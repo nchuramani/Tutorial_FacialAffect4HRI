@@ -3,6 +3,10 @@ import cv2
 from skimage import exposure
 
 def preprocess(image, grayscale=False, normalise=False, imageSize=(64, 64), resize=False, equalise=False):
+	"""
+	Try implementing more preprocessing methods.
+	"""
+
 	image = numpy.array(image)
 	if grayscale:
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
