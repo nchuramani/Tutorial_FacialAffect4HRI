@@ -2,6 +2,7 @@
 FaceChannelV1.py
 ====================================
 Version1 of the FaceChannel model.
+https://github.com/pablovin/FaceChannel
 """
 
 
@@ -16,7 +17,7 @@ from keras.layers.convolutional import Conv2D, MaxPooling2D, AveragePooling2D
 
 from tensorflow.keras.layers import BatchNormalization, MaxPooling2D, Activation, Flatten, Dropout, Dense, Lambda
 
-import metrics
+from FaceChannel.FaceChannelUtils import metrics
 
 import Utils.facedetect as facedetect
 import Utils.preprocessing as preprocessing
@@ -113,7 +114,7 @@ class FaceChannelV1:
                 else:
                     processedImages.append(img)
 
-        classification = self.model.predict(images,batch_size=self.BATCH_SIZE, verbose=0)
+        classification = self.model.predict(images, batch_size=self.BATCH_SIZE, verbose=0)
 
         return classification
 

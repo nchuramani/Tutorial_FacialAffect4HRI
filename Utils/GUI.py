@@ -11,7 +11,7 @@ import numpy
 import cv2
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-
+import os
 
 class GUIController:
 
@@ -38,14 +38,14 @@ class GUIController:
 
     def createDimensionalPlotGUI(self, arousals, valences, frame):
         plt.style.use('dark_background')
-        fig, axs = plt.subplots(2, figsize=(10,5))
+        fig, axs = plt.subplots(2, figsize=(10, 5))
         axs[0].set_title('Arousal')
         axs[1].set_title('Valence')
 
-        axs[0].set_xlim([0,100])
+        axs[0].set_xlim([0, 100])
         axs[1].set_xlim([0, 100])
 
-        axs[0].set_ylim([-1,1])
+        axs[0].set_ylim([-1, 1])
         axs[1].set_ylim([-1, 1])
 
         axs[0].plot(range(len(arousals)), arousals)
@@ -59,10 +59,10 @@ class GUIController:
         plot = cv2.resize(plot, (1000, 250))
 
         frame[500:750, 0:1000] = plot
-
+        os.remove("plot.png")
         return frame
 
-    def createDimensionalEmotionGUI(self, classificationReport, frame, categoricalReport=[], categoricalDictionary=None):
+    def createDimensionalEmotionGUI(self, classificationReport, frame, categoricalReport=[], categoricalDictionary=None, clifer=False):
 
 
         if not len(categoricalReport) == 0:
@@ -84,8 +84,12 @@ class GUIController:
         cv2.putText(frame, "Negative", (640+15, 210), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
         cv2.putText(frame, "Positive", (640+295, 210), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
-        arousal = float(float(classificationReport[0][0][0]) * 100)
-        valence = float(float(classificationReport[1][0][0]) * 100)
+        if not clifer:
+            arousal = float(float(classificationReport[0][0][0]) * 100)
+            valence = float(float(classificationReport[1][0][0]) * 100)
+        else:
+            arousal = float(float(numpy.mean(classificationReport, axis=0)[0]) * 100)
+            valence = float(float(numpy.mean(classificationReport, axis=0)[1]) * 100)
 
         #print "Arousal:", arousal
         #print "Valence:", valence

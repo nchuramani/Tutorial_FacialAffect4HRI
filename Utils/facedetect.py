@@ -2,6 +2,8 @@
 import cv2
 import dlib
 import Utils.alignment as alignment
+import numpy
+
 
 CASCADE_PATH = "Utils/OpenCV_Files/haarcascade_frontalface_alt.xml"
 DLIB_CNN_FACE_DETECTOR_PATH = "Utils/Dlib_Files/mmod_human_face_detector.dat"
@@ -21,7 +23,12 @@ def detectFace(frame, face_detector="CV", aligned=False):
 			rects[:, 2:] += rects[:, :2]
 			x1, y1, x2, y2 = rects[0]
 			face = rects[0]
-			face_img = frame[y1:y2, x1:x2]
+			if aligned:
+				bbox_rect = dlib.rectangle(left=int(x1), top=int(y1), right=int(x2), bottom=int(y2))
+
+				face_img = alignment.face_align(image=frame, face_box=bbox_rect, face_width=128)
+			else:
+				face_img = frame[y1:y2, x1:x2]
 		return face, face_img
 	elif face_detector == "dlib_HOG":
 		detector = dlib.get_frontal_face_detector()
@@ -44,7 +51,7 @@ def detectFace(frame, face_detector="CV", aligned=False):
 			for i, d in enumerate(detected_faces):
 				face = [d.rect.left(), d.rect.top(), d.rect.right(), d.rect.bottom()]
 				if aligned:
-					face_img = alignment.face_align(image=frame,face_box=d.rect,face_width=128)
+					face_img = alignment.face_align(image=frame, face_box=d.rect, face_width=128)
 				else:
 					face_img = frame[face[1]:face[3], face[0]:face[2]]
 				break

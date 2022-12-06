@@ -133,3 +133,15 @@ dmypy.json
 
 # PyCharm
 .idea/
+
+
+# TrainedNetworks
+CLIFER/saved_GWRs
+CLIFER/TrainedNetworks
+
+# Frames
+Images
+CLIFER/Faces
+CLIFER/Frames
+CLIFER/Faces_Imagined
+
