@@ -342,22 +342,4 @@ if __name__ == "__main__":
 				if cv2.waitKey(1) == ord('q'):
 					break
 
-		# else:
-		# 	faces_path = "Images/Faces/"
-		# 	faces_aligned_path = "Images/Faces_Aligned/"
-		# 	count = 0
-		# 	for face_path, face_aligned_path in zip(orderDataFolder(faces_path), orderDataFolder(faces_aligned_path)):
-		# 		count += 1
-		# 		print("Reading Frame " + str(count) + "/" + str(len(orderDataFolder(faces_path))))
-		# 		face = cv2.imread(faces_path + face_path)
-		# 		aligned_face = cv2.imread(faces_aligned_path + face_aligned_path)
-		#
-		#
-		# 		face = preprocessing.preprocess(image=face, grayscale=True, normalise=True,imageSize=(128, 128), resize=True, equalise=True)
-		# 		aligned_face = preprocessing.preprocess(image=aligned_face, grayscale=True, normalise=True,imageSize=(128, 128), resize=True, equalise=True)
-		# 		frame = numpy.concatenate((face, aligned_face), axis=1)
-		# 		cv2.imshow('frame', frame)
-		# 		input("")
-		# 		if cv2.waitKey(10) & 0xFF == ord('q'):
-		# 			break
 	cv2.destroyAllWindows()
