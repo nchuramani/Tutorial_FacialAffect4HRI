@@ -3,7 +3,7 @@ import cv2
 from Utils import facedetect
 
 
-image = cv2.imread("Sample_Images/sample1.jpeg")
+image = cv2.imread("Sample_Images/sample3.jpeg")
 
 face, face_img = facedetect.detectFace(frame=image, face_detector="CV", aligned=False)
 
